@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Librus Uczeń</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    margin:0;
+    padding:0;
+    background:#000;
+    color:#fff;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    min-height:100vh;
+}
+
+/* GÓRNY PASEK */
+.top{
+    height:92px;
+    background:#111;
+    border-bottom:2px solid #383838;
+    display:flex;
+    align-items:center;
+    padding:0 24px;
+}
+
+.menu{
+    font-size:48px;
+    color:#35a8e0;
+    line-height:1;
+    cursor:pointer;
+}
+
+/* ODŚWIEŻANIE */
+.refresh{
+    height:90px;
+    background:#111;
+    border-bottom:2px solid #444;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:0 24px;
+    color:#aaa;
+    font-size:20px;
+}
+
+.refresh-icon{
+    color:#35a8e0;
+    font-size:42px;
+}
+
+/* AKTUALNOŚCI */
+.feed{
+    padding-bottom:95px;
+}
+
+.post{
+    border-bottom:2px solid #383838;
+    padding:0 25px 28px;
+    display:flex;
+    gap:25px;
+}
+
+.avatar{
+    width:82px;
+    height:82px;
+    min-width:82px;
+    border-radius:50%;
+    background:#3b3b3b;
+    margin-top:12px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:38px;
+}
+
+.post-content{
+    padding-top:12px;
+    flex:1;
+}
+
+.post-name{
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.post-text{
+    font-size:27px;
+    line-height:1.35;
+}
+
+.post-small{
+    margin-top:20px;
+    color:#bbb;
+    font-size:21px;
+}
+
+/* NIEBIESKIE LINKI */
+.blue{
+    color:#269edb;
+}
+
+/* OCENA */
+.grade-card{
+    margin-top:25px;
+    background:#a92e91;
+    border-radius:18px;
+    min-height:130px;
+    display:flex;
+    align-items:center;
+    padding:20px 35px;
+}
+
+.grade-number{
+    width:110px;
+    font-size:70px;
+    font-weight:normal;
+}
+
+.grade-info{
+    font-size:28px;
+    line-height:1.35;
+}
+
+.grade-date{
+    font-weight:bold;
+}
+
+/* WYDARZENIE */
+.event-area{
+    margin-top:35px;
+    text-align:center;
+}
+
+.event-date{
+    font-size:26px;
+    margin-bottom:12px;
+}
+
+.event-row{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:18px;
+}
+
+.event-time{
+    font-size:25px;
+    line-height:3.2;
+}
+
+.event-box{
+    background:#3b3b3b;
+    border-radius:14px;
+    padding:15px 22px;
+    text-align:left;
+    min-width:440px;
+    font-size:25px;
+    position:relative;
+}
+
+.event-dot{
+    position:absolute;
+    right:20px;
+    top:20px;
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    background:#ec50d5;
+}
+
+/* DOLNA NAWIGACJA */
+.bottom{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    height:95px;
+    background:#111;
+    border-top:2px solid #444;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    z-index:20;
+}
+
+.nav-icon{
+    color:#aaa;
+    font-size:39px;
+    text-align:center;
+}
+
+.nav-icon.active{
+    color:#35a8e0;
+}
+
+.nav-icon span{
+    display:block;
+    font-size:13px;
+    margin-top:5px;
+}
+
+/* TELEFON */
+@media(max-width:700px){
+
+    .top{
+        height:95px;
+    }
+
+    .refresh{
+        height:90px;
+        font-size:18px;
+    }
+
+    .post{
+        padding:0 20px 28px;
+        gap:18px;
+    }
+
+    .avatar{
+        width:72px;
+        height:72px;
+        min-width:72px;
+    }
+
+    .post-name{
+        font-size:22px;
+    }
+
+    .post-text{
+        font-size:21px;
+    }
+
+    .post-small{
+        font-size:17px;
+    }
+
+    .grade-card{
+        padding:16px 20px;
+        min-height:110px;
+    }
+
+    .grade-number{
+        width:85px;
+        font-size:60px;
+    }
+
+    .grade-info{
+        font-size:21px;
+    }
+
+    .event-date{
+        font-size:20px;
+    }
+
+    .event-box{
+        min-width:0;
+        width:70%;
+        font-size:19px;
+    }
+
+    .event-time{
+        font-size:19px;
+    }
+
+    .bottom{
+        height:85px;
+    }
+
+    .nav-icon{
+        font-size:30px;
+    }
+}
+
+<style>
+@media(max-width:700px){
+  .student-header{gap:8px;}
+  #studentPeriodTitle{font-size:17px;white-space:nowrap;}
+  #studentSemesterSelect{font-size:12px;max-width:82px;}
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<!-- GÓRNY PASEK -->
+<div class="top">
+    <div class="menu">☰</div>
+</div>
+
+<!-- ODŚWIEŻANIE -->
+<div class="refresh">
+    <div class="refresh-icon">⟳</div>
+    <div>Uaktualniono: kilka sekund temu</div>
+</div>
+
+<div class="feed">
+
+    <!-- REKLAMA -->
+    <div class="post">
+        <div class="avatar">☷</div>
+
+        <div class="post-content">
+            <div class="post-name">Portal Librus Rodzina</div>
+
+            <div class="post-text">
+                Świąteczny hit dla całej klasy
+                <br>
+                VR, AI, druk 3D i świąteczne wyzwania.
+                Warsztaty, które zachwycą całą klasę!
+                <span class="blue">Czytaj więcej</span>
+            </div>
+
+            <div class="post-small">
+                ⓘ Wiadomość reklamowa
+            </div>
+        </div>
+    </div>
+
+    <!-- OCENA -->
+    <div class="post">
+
+        <div class="avatar">👦</div>
+
+        <div class="post-content">
+
+            <div class="post-name">
+                Filip <span style="font-weight:normal;">• 19 godzin</span>
+            </div>
+
+            <div class="post-text">
+                Dodano ocenę
+            </div>
+
+            <div class="grade-card">
+
+                <div class="grade-number">6</div>
+
+                <div class="grade-info">
+                    <div class="grade-date">12.10, Matematyka</div>
+                    <div>Kartkówka</div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- WYDARZENIE -->
+    <div class="post">
+
+        <div class="avatar">👦</div>
+
+        <div class="post-content">
+
+            <div class="post-name">
+                Filip <span style="font-weight:normal;">• 1 dzień</span>
+            </div>
+
+            <div class="post-text">
+                Dodano zdarzenie
+            </div>
+
+            <div class="event-area">
+
+                <div class="event-date">
+                    Poniedziałek, 19 Października 2026
+                </div>
+
+                <div class="event-row">
+
+                    <div class="event-time">
+                        14:40<br>
+                        15:25
+                    </div>
+
+                    <div class="event-box">
+                        Sprawdzian<br>
+                        Przedmiot: Język angielski
+
+                        <div class="event-dot"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- KOLEJNA WIADOMOŚĆ -->
+    <div class="post">
+
+        <div class="avatar">ⓘ</div>
+
+        <div class="post-content">
+
+            <div class="post-name">
+                Portal Librus Rodzina
+            </div>
+
+            <div class="post-text">
+                Czytasz nasze artykuły na portalu albo w aplikacji?
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- DOLNA NAWIGACJA -->
+<div class="bottom">
+
+    <div class="nav-icon" onclick="showGrades()">
+    ▦
+    <span>Oceny</span>
+</div>
+
+    <div class="nav-icon">
+        ▦
+        <span>Oceny</span>
+    </div>
+
+    <div class="nav-icon">
+        ▣
+        <span>Terminarz</span>
+    </div>
+
+    <div class="nav-icon">
+        ✉
+        <span>Wiadomości</span>
+    </div>
+
+    <div class="nav-icon">
+        ▥
+        <span>Więcej</span>
+    </div>
+
+</div>
+<!-- EKRAN OCEN -->
+<div id="gradesScreen" class="student-screen">
+  <!-- LISTA PRZEDMIOTÓW -->
+<div id="subjectsScreen" class="student-screen">
+
+  <div class="student-header">
+    <div class="back-button" onclick="backHome()">‹</div>
+    <div class="student-title">Oceny</div>
+  </div>
+
+  <div class="subject-list">
+
+    <div class="subject-card" onclick="openMathGrades()">
+      <div>
+        <div class="subject-name">Matematyka</div>
+        <div class="subject-average">
+          Średnia: <span id="mathAverage">-</span>
+        </div>
+      </div>
+
+      <div class="subject-arrow">›</div>
+    </div>
+
+  </div>
+
+</div>
+  <div class="student-header">
+    <div class="back-button" onclick="backHome()">‹</div>
+    <div style="display:flex;align-items:center;gap:8px;min-width:0">
+      <div class="student-title" id="studentPeriodTitle">Matematyka - Okres 1</div>
+      <select id="studentSemesterSelect" onchange="setStudentSemester(this.value)" style="padding:7px 8px;border-radius:8px;border:1px solid #444;background:#222;color:white">
+        <option value="1">1 okres</option>
+        <option value="2">2 okres</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="average-card">
+    <div>
+      <div class="average-label">Średnia ocen</div>
+      <div class="average-number">4,00</div>
+    </div>
+    <div>
+      <div class="average-label">Średnia roczna</div>
+      <div class="average-number">4,00</div>
+    </div>
+  </div>
+
+  <div class="grade-list" id="gradeList">
+    <div style="text-align:center;color:#aaa;padding:30px 10px;">
+      Ładowanie ocen...
+    </div>
+  </div>
+</div>
+
+
+<!-- SZCZEGÓŁY OCENY -->
+<div id="gradeDetailScreen" class="student-screen">
+
+  <div class="student-header">
+    <div class="back-button" onclick="backGrades()">‹</div>
+    <div class="student-title">Szczegóły oceny</div>
+  </div>
+
+  <div class="detail-grade-card">
+    <div class="detail-grade-number" id="detailGradeNumber">-</div>
+    <div>
+      <div class="detail-subject" id="detailSubject">Matematyka</div>
+      <div class="detail-category" id="detailCategory">-</div>
+    </div>
+  </div>
+
+  <div class="detail-box">
+
+    <div class="detail-row">
+      <span>Ocena</span>
+      <b id="detailGradeValue">-</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Opis</span>
+      <b id="detailDescription">Brak opisu</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Kategoria</span>
+      <b id="detailCategoryRow">-</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Nauczyciel</span>
+      <b id="detailTeacher">Filip Jabłonowski</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Liczy się do średniej</span>
+      <b id="detailCounts">-</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Waga</span>
+      <b id="detailWeight">-</b>
+    </div>
+
+  </div>
+
+</div>
+
+
+<style>
+.student-screen{
+  display:none;
+  min-height:100vh;
+  background:#000;
+  color:#fff;
+  padding-bottom:30px;
+}
+
+.student-header{
+  height:90px;
+  background:#111;
+  border-bottom:2px solid #383838;
+  display:flex;
+  align-items:center;
+  padding:0 20px;
+}
+
+.back-button{
+  font-size:55px;
+  color:#35a8e0;
+  width:55px;
+  cursor:pointer;
+}
+
+.student-title{
+  font-size:24px;
+  font-weight:bold;
+}
+
+.average-card{
+  margin:25px 18px;
+  padding:22px;
+  background:#a92e91;
+  border-radius:18px;
+  display:flex;
+  justify-content:space-around;
+  text-align:center;
+}
+
+.average-label{
+  font-size:16px;
+  color:#ddd;
+}
+
+.average-number{
+  font-size:38px;
+  font-weight:bold;
+  margin-top:5px;
+}
+
+.grade-list{
+  padding:0 18px;
+}
+
+.student-grade{
+  background:#a92e91;
+  border-radius:18px;
+  min-height:100px;
+  margin-bottom:15px;
+  padding:15px 20px;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+}
+
+.grade-big{
+  font-size:55px;
+  width:80px;
+}
+
+.grade-text{
+  display:flex;
+  flex-direction:column;
+  font-size:19px;
+  gap:7px;
+}
+
+.grade-text span{
+  color:#ddd;
+  font-size:15px;
+}
+
+.grade-arrow{
+  margin-left:auto;
+  font-size:40px;
+  color:#ddd;
+}
+
+.detail-grade-card{
+  margin:25px 18px;
+  padding:25px;
+  background:#a92e91;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  gap:25px;
+}
+
+.detail-grade-number{
+  font-size:70px;
+}
+
+.detail-subject{
+  font-size:23px;
+  font-weight:bold;
+}
+
+.detail-category{
+  margin-top:8px;
+  color:#ddd;
+  font-size:17px;
+}
+
+.detail-box{
+  margin:0 18px;
+  background:#151515;
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.detail-row{
+  min-height:65px;
+  padding:15px 18px;
+  border-bottom:1px solid #383838;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.detail-row span{
+  color:#aaa;
+}
+
+.detail-row b{
+  text-align:right;
+}
+
+@media(max-width:700px){
+  .student-title{
+    font-size:20px;
+  }
+
+  .average-card{
+    margin:20px 14px;
+  }
+
+  .grade-list{
+    padding:0 14px;
+  }
+
+  .detail-box{
+    margin:0 14px;
+  }
+
+  .detail-row{
+    font-size:15px;
+  }
+}
+</style>
+
+
+<script>
+    const SUPABASE_URL = "https://qtrwwlvtfcdsywrnxxaz.supabase.co";
+const SUPABASE_KEY = "sb_publishable_hkp4ffjUEGd6Fxo5c6u4pA_3mZAusvA";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+let currentStudentGrades = [];
+let currentSelectedGrade = null;
+let studentSemester = '1';
+
+async function loadTomekGrades(){
+  const list = document.getElementById("gradeList");
+  const averageNumbers = document.querySelectorAll("#gradesScreen .average-number");
+
+  list.innerHTML = `
+    <div style="text-align:center;color:#aaa;padding:30px 10px;">
+      Ładowanie ocen...
+    </div>`;
+
+  try {
+    const { data: student, error: studentError } = await supabaseClient
+      .from("students")
+      .select("id, name, class")
+      .eq("name", "Tomek")
+      .eq("class", "6d")
+      .limit(1)
+      .single();
+
+    if(studentError) throw studentError;
+
+    const { data, error } = await supabaseClient
+      .from("grades")
+      .select("id, subject, grade, category, description, teacher, weight, counts_in_average, semester")
+      .eq("student_id", student.id)
+      .eq("subject", "Matematyka")
+      .order("id", { ascending: false });
+
+    if(error) throw error;
+
+    currentStudentGrades = (data || []).filter(item => {
+      const semester = item.semester == null ? '1' : String(item.semester);
+      return semester === studentSemester;
+    });
+
+    if(currentStudentGrades.length === 0){
+      list.innerHTML = `
+        <div style="text-align:center;color:#aaa;padding:30px 10px;">
+          Brak ocen z matematyki.
+        </div>`;
+      averageNumbers.forEach(el => el.textContent = "-");
+      return;
+    }
+
+    list.innerHTML = "";
+
+    currentStudentGrades.forEach((item, index) => {
+      const card = document.createElement("div");
+      card.className = "student-grade";
+      card.onclick = () => showGradeDetail(index);
+
+      card.innerHTML = `
+        <div class="grade-big">${escapeHtml(item.grade)}</div>
+        <div class="grade-text">
+          <b>${escapeHtml(item.category || "Brak kategorii")}</b>
+          <span>${escapeHtml(item.description || "Brak opisu")}</span>
+        </div>
+        <div class="grade-arrow">›</div>
+      `;
+
+      list.appendChild(card);
+    });
+
+    let weightedSum = 0;
+    let totalWeight = 0;
+
+    currentStudentGrades.forEach(item => {
+      if(item.counts_in_average !== true) return;
+
+      const gradeText = String(item.grade).trim();
+      let value = null;
+      if(gradeText === "np" || gradeText === "nz"){
+        value = null;
+      } else if(gradeText.includes("+")){
+        value = parseInt(gradeText) + 0.25;
+      } else if(gradeText.includes("-")){
+        value = parseInt(gradeText) - 0.25;
+      } else {
+        value = parseFloat(gradeText);
+      }
+      const weight = Number(item.weight);
+
+      if(!Number.isFinite(value) || !Number.isFinite(weight) || weight <= 0) return;
+
+      weightedSum += value * weight;
+      totalWeight += weight;
+    });
+
+    if(totalWeight > 0){
+      const avg = weightedSum / totalWeight;
+      averageNumbers[0].textContent = avg.toFixed(2).replace(".", ",");
+    } else {
+      averageNumbers[0].textContent = "-";
+    }
+
+    if(averageNumbers[1]){
+      averageNumbers[1].textContent = "-";
+    }
+
+  } catch(error) {
+    console.error("Błąd pobierania ocen Marty:", error);
+
+    list.innerHTML = `
+      <div style="text-align:center;color:#ff7777;padding:30px 10px;">
+        Nie udało się pobrać ocen.
+      </div>`;
+
+    averageNumbers.forEach(el => el.textContent = "-");
+  }
+}
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function showGrades(){
+  document.querySelector('.feed').style.display='none';
+  document.getElementById('gradesScreen').style.display='block';
+  document.getElementById('gradeDetailScreen').style.display='none';
+  document.querySelector('.bottom').style.display='none';
+
+  loadTomekGrades();
+}
+
+function showGradeDetail(index){
+  currentSelectedGrade = currentStudentGrades[index];
+
+  if(!currentSelectedGrade) return;
+
+  document.getElementById("detailGradeNumber").textContent = currentSelectedGrade.grade;
+  document.getElementById("detailGradeValue").textContent = currentSelectedGrade.grade;
+  document.getElementById("detailSubject").textContent = currentSelectedGrade.subject || "Matematyka";
+
+  document.getElementById("detailCategory").textContent =
+    currentSelectedGrade.category || "Brak kategorii";
+
+  document.getElementById("detailCategoryRow").textContent =
+    currentSelectedGrade.category || "Brak kategorii";
+
+  document.getElementById("detailDescription").textContent =
+    currentSelectedGrade.description || "Brak opisu";
+
+  document.getElementById("detailTeacher").textContent =
+    currentSelectedGrade.teacher || "Brak danych";
+
+  document.getElementById("detailCounts").textContent =
+    currentSelectedGrade.counts_in_average === true ? "Tak" :
+    currentSelectedGrade.counts_in_average === false ? "Nie" :
+    "Brak danych";
+
+  document.getElementById("detailWeight").textContent =
+    currentSelectedGrade.weight ?? "Brak danych";
+
+  document.getElementById('gradesScreen').style.display='none';
+  document.getElementById('gradeDetailScreen').style.display='block';
+}
+
+function backGrades(){
+  document.getElementById('gradeDetailScreen').style.display='none';
+  document.getElementById('gradesScreen').style.display='block';
+}
+
+function backHome(){
+  document.getElementById('gradesScreen').style.display='none';
+  document.getElementById('gradeDetailScreen').style.display='none';
+  document.querySelector('.feed').style.display='block';
+  document.querySelector('.bottom').style.display='flex';
+}
+
+</script>
+<script>
+console.log("Supabase biblioteka:", window.supabase);
+console.log("Supabase klient:", supabaseClient);
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  loadTomekGrades();
+});
+</script>
+</body>
+</html>
